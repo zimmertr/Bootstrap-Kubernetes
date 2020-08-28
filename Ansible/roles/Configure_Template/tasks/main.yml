@@ -1,0 +1,128 @@
+# - name: Waiting for Debian to finish performing automatic updates before continuing.
+#   script: ../../files/bash_scripts/monitor_automatic_updates_status.sh
+
+- name: Performing a Package Upgrade
+  apt:
+    name: '*'
+    state: latest
+
+- name: Installing the base packages
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - haveged
+      - gnupg2
+      - openssl
+      - python-pip
+      - qemu-guest-agent
+      - software-properties-common
+      - arptables
+      - ebtables
+
+- name: Configuring Debian to use Legacy iptables
+  alternatives:
+    name: "{{ item }}"
+    path: /usr/sbin/{{ item }}-legacy
+  with_items:
+    - "iptables"
+    - "ip6tables"
+    - "arptables"
+    - "ebtables"
+
+- name: Adding GPG Keys for Kubernetes dependencies
+  apt_key:
+    url: "{{ item }}"
+  with_items:
+    - "https://download.docker.com/linux/debian/gpg"
+    - "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
+
+- name: Adding repositories for Kubernetes dependencies
+  apt_repository:
+    repo: "{{ item }}"
+  with_items:
+    - "deb [arch=amd64] https://download.docker.com/linux/debian buster stable"
+    - "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+
+# - name: Updating the package repositories
+#
+#   apt:
+#     update_cache: yes
+
+- name: Installing the Kubernetes dependencies
+  apt:
+    name: ['docker-ce', 'kubelet', 'kubeadm', 'kubectl']
+    # name: ['docker-ce={{ docker_version }}', 'kubelet', 'kubeadm', 'kubectl']
+
+- name: Configuring the Docker CGroup
+  shell: |
+    cat > /etc/docker/daemon.json <<EOF
+    {
+      "exec-opts": ["native.cgroupdriver=systemd"],
+      "log-driver": "json-file",
+      "log-opts": {
+        "max-size": "100m"
+      },
+      "storage-driver": "overlay2"
+    }
+    EOF
+
+# - name: Installing the Python library dependencies
+#
+#   pip:
+#     name: ['openshift', 'kubernetes', 'pyyaml', 'requests']
+#     extra_args: --upgrade
+
+- name: Enabling the necessary Systemd modules
+  systemd:
+    state: restarted
+    name: "{{ item }}"
+    enabled: yes
+  with_items:
+    - "docker"
+    - "kubelet"
+    - "qemu-guest-agent"
+    - "haveged"
+
+- name: Loading the br_netfilter kernel module
+  modprobe:
+    name: br_netfilter
+    state: present
+
+- name: Configuring iptables to route packets across the network bridge
+  sysctl:
+    name: "{{ entry }}"
+    value: 1
+    sysctl_set: yes
+  loop:
+    - net.bridge.bridge-nf-call-ip6tables
+    - net.bridge.bridge-nf-call-iptables
+  loop_control:
+    loop_var: entry
+
+- name: Creating a directory to store TKS resources
+  file:
+    path: /etc/tks
+    state: directory
+    owner: tks
+    group: tks
+
+- name: Copying over the Kubeadm configuration files
+  template:
+    src: "{{ file }}"
+    dest: "/etc/tks/{{ file }}"
+    owner: tks
+    group: tks
+  loop:
+    - cp_configuration_primary.yml
+    - cp_configuration_secondary.yml
+    - node_configuration.yml
+  loop_control:
+    loop_var: file
+
+- name: Turning off the VM
+  shell: shutdown -h now
+  ignore_errors: true
+  async: 1
+  poll: 0
