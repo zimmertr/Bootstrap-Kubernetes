@@ -1,0 +1,54 @@
+---
+- name: Downloading a Debian 10 image
+  get_url:
+    url: "https://cdimage.debian.org/cdimage/openstack/current-10/debian-10-openstack-amd64.qcow2"
+    dest: /mnt/RAIDPool_Templates/template/iso/
+
+- name: Creating a Debian 10 template
+  command: >
+    qm create {{ TEMPLATE_ID }}
+    --name TKS-Debian-Template
+    --description "Debian 10 template consumed by TKS for Kubernetes Virtual Machines"
+    --agent 1
+    --cores {{ TEMPLATE_VCPUS }}
+    --memory {{ TEMPLATE_MEMORY }}
+    --net0 "virtio,bridge={{ TEMPLATE_BRIDGE }}"
+
+- name: Adding a VLAN tag to the template
+  command: >
+    qm set {{ TEMPLATE_ID }}
+    --net0 "virtio,bridge={{ TEMPLATE_BRIDGE }},tag={{ TEMPLATE_VLAN_ID }}"
+  when:
+    - TEMPLATE_VLAN_ID is defined
+    - TEMPLATE_VLAN_ID|length != 0
+
+- name: Importing the Debian 10 image into the template
+  command: qm importdisk {{ TEMPLATE_ID }} /mnt/RAIDPool_Templates/template/iso/debian-10-openstack-amd64.qcow2 {{ TEMPLATE_STORAGE_NAME }}
+
+- name: Configuring the template's hardware
+  command: >
+    qm set {{ TEMPLATE_ID }}
+    --scsihw virtio-scsi-pci
+    --scsi0 /mnt/RAIDPool_Templates/images/{{ TEMPLATE_ID }}/vm-{{ TEMPLATE_ID }}-disk-0.raw
+    --ide2 {{ TEMPLATE_STORAGE_NAME }}:cloudinit
+    --boot c
+    --bootdisk scsi0
+    --serial0 /dev/tty0
+
+- name: Copying over the cloud init configuration file
+  template:
+    src: user-config.yml
+    dest: /mnt/RAIDPool_Templates/snippets/user-config.yml
+
+- name: Adding a custom cloud init configuration
+  command: >
+    qm set {{ TEMPLATE_ID }}
+    --citype configdrive2
+    --cicustom user=RAIDPool_Templates:snippets/user-config.yml
+    --ipconfig0 "gw={{ TEMPLATE_GATEWAY }},ip={{ TEMPLATE_IP_ADDRESS }}/{{ TEMPLATE_SUBNET_SIZE }}"
+
+- name: Resizing the template's disk
+  command: qm resize {{ TEMPLATE_ID }} scsi0 {{ TEMPLATE_DISK_SIZE }}
+
+- name: Powering on the VM
+  command: qm start {{ TEMPLATE_ID }}

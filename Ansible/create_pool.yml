@@ -1,0 +1,13 @@
+- hosts: proxmox
+  gather_facts: False
+  tasks:
+    - name: Creating a Resource Pool
+      command: >
+        pvesh create /pools
+        -poolid "{{ lookup('env', 'TKS_BK_V_POOL_NAME') }}"
+        --Comment "Resources pertaining to TKS"
+      when:
+        - lookup('env', 'TKS_BK_T_CREATE_POOL') == 'true'
+      ignore_errors: true
+
+
