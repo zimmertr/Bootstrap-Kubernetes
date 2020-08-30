@@ -1,0 +1,30 @@
+##################################################
+# DO NOT MODIFY - The below variables are        #
+# automatically used, when necessary, to set     #
+# default values and retrieve values from ENV.   #
+#                                                #
+# See the documentation for more information.    #
+##################################################
+TEMPLATE_VM_ID: "{{ lookup('env', 'TEMPLATE_VM_ID') }}"
+TEMPLATE_SOCKETS: "{{ lookup('env', 'TEMPLATE_SOCKETS') | default('1', true) }}"
+TEMPLATE_VCPUS: "{{ lookup('env', 'TEMPLATE_VCPUS') | default('2', true) }}"
+TEMPLATE_MEMORY: "{{ lookup('env', 'TEMPLATE_MEMORY') | default('4096', true) }}"
+TEMPLATE_DISK_SIZE: "{{ lookup('env', 'TEMPLATE_DISK_SIZE') | default('20G', true) }}"
+TEMPLATE_TKS_VLAN_ID: "{{ lookup('env', 'TEMPLATE_TKS_VLAN_ID') }}"
+TEMPLATE_TKS_NET_BRIDGE: "{{ lookup('env', 'TEMPLATE_TKS_NET_BRIDGE') | default('vmbr0', true) }}"
+TEMPLATE_STORAGE_NAME: "{{ lookup('env', 'TEMPLATE_STORAGE_NAME') }}"
+TEMPLATE_SSH_PUBLIC_KEY: "{{ lookup('env', 'TEMPLATE_SSH_PUBLIC_KEY') }}"
+TEMPLATE_IP_ADDRESS: "{{ lookup('env', 'TEMPLATE_IP_ADDRESS') }}"
+TEMPLATE_SUBNET_SIZE: "{{ lookup('env', 'TEMPLATE_SUBNET_SIZE') | default('24', true) }}"
+TEMPLATE_GATEWAY: "{{ lookup('env', 'TEMPLATE_GATEWAY') }}"
+TEMPLATE_NAMESERVER: "{{ lookup('env', 'TEMPLATE_NAMESERVER') | default('8.8.8.8', true) }}"
+TEMPLATE_SEARCH_DOMAIN: "{{ lookup('env', 'TEMPLATE_SEARCH_DOMAIN') }}"
+TKS_CREATE_POOL: "{{ lookup('env', 'TKS_CREATE_POOL') | default('true', true)  }}"
+TKS_POOL_NAME: "{{ lookup('env', 'TKS_POOL_NAME') | default('TKS', true)  }}"
+HAPROXY_HOSTNAME: "{{ lookup('env', 'HAPROXY_HOSTNAME') }}"
+K8S_JOIN_TOKEN: "{{ lookup('env', 'K8S_JOIN_TOKEN') | default('abcdef.1234567890abcdef', true) }}"
+K8S_CERT_KEY: "{{ lookup('env', 'K8S_CERT_KEY') | default('abcdefghijklmnopqrstuvqxyz1234567890abcdefghijklmnopqrstuvwxqz01', true) }}"
+K8S_CLUSTER_NAME: "{{ lookup('env', 'K8S_CLUSTER_NAME') | default('tks', true) }}"
+K8S_VERSION: "{{ lookup('env', 'K8S_VERSION') | default('v1.19.0', true) }}"
+K8S_POD_NETWORK_CIDR: "{{ lookup('env', 'K8S_POD_NETWORK_CIDR') | default('172.16.0.0/16', true) }}"
+K8S_SVC_NETWORK_CIDR: "{{ lookup('env', 'K8S_SVC_NETWORK_CIDR') | default('10.96.0.0/12', true) }}"

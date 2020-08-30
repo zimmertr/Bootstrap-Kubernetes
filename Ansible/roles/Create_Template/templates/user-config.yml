@@ -6,7 +6,7 @@ users:
       - sudo
     lock_passwd: true
     ssh-authorized-keys:
-      - "{{ TEMPLATE_SSH_KEY }}"
+      - "{{ TEMPLATE_SSH_PUBLIC_KEY }}"
 write_files:
   - path: /etc/resolvconf/resolv.conf.d/base
     content: |

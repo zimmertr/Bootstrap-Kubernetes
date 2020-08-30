@@ -1,6 +1,3 @@
-# - name: Waiting for Debian to finish performing automatic updates before continuing.
-#   script: ../../files/bash_scripts/monitor_automatic_updates_status.sh
-
 - name: Performing a Package Upgrade
   apt:
     name: '*'
@@ -45,11 +42,6 @@
     - "deb [arch=amd64] https://download.docker.com/linux/debian buster stable"
     - "deb https://apt.kubernetes.io/ kubernetes-xenial main"
 
-# - name: Updating the package repositories
-#
-#   apt:
-#     update_cache: yes
-
 - name: Installing the Kubernetes dependencies
   apt:
     name: ['docker-ce', 'kubelet', 'kubeadm', 'kubectl']
@@ -67,12 +59,6 @@
       "storage-driver": "overlay2"
     }
     EOF
-
-# - name: Installing the Python library dependencies
-#
-#   pip:
-#     name: ['openshift', 'kubernetes', 'pyyaml', 'requests']
-#     extra_args: --upgrade
 
 - name: Enabling the necessary Systemd modules
   systemd:

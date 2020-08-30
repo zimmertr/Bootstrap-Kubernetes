@@ -5,20 +5,20 @@ cgroupDriver: systemd
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: InitConfiguration
 bootstrapTokens:
-  - token: "{{ TEMPLATE_K8S_JOIN_TOKEN }}"
+  - token: "{{ K8S_JOIN_TOKEN }}"
     ttl: "0"
-certificateKey: "{{ TEMPLATE_K8S_CERT_KEY }}"
+certificateKey: "{{ K8S_CERT_KEY }}"
 ---
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
 apiServer:
   extraArgs:
     cloud-provider: external
-clusterName: "{{ TEMPLATE_K8S_CLUSTER_NAME }}"
-kubernetesVersion: "{{ TEMPLATE_K8S_VERSION }}"
+clusterName: "{{ K8S_CLUSTER_NAME }}"
+kubernetesVersion: "{{ K8S_VERSION }}"
 networking:
-  podSubnet: "{{ TEMPLATE_K8S_POD_NETWORK_CIDR }}"
-  serviceSubnet: "{{ TEMPLATE_K8S_SVC_NETWORK_CIDR }}"
+  podSubnet: "{{ K8S_POD_NETWORK_CIDR }}"
+  serviceSubnet: "{{ K8S_SVC_NETWORK_CIDR }}"
 skip-certificate-key-print: true
 skip-token-print: true
-controlPlaneEndpoint: "{{ TEMPLATE_K8S_LB_HN }}.{{ TEMPLATE_K8S_SEARCH_DOMAIN }}:6443"
+controlPlaneEndpoint: "{{ HAPROXY_HOSTNAME }}.{{ TEMPLATE_SEARCH_DOMAIN }}:6443"

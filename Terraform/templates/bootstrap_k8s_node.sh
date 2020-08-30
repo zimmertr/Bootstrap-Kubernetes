@@ -11,14 +11,14 @@ main(){
 }
 
 debug(){
-  echo "TKS - DEBUG - $(date) - k8s_node_hostname_prefix: ${k8s_node_hostname_prefix}"
-  echo "TKS - DEBUG - $(date) - search_domain: ${search_domain}"
-  echo "TKS - DEBUG - $(date) - count_index: ${count_index + 1}"
+  echo "TKS - DEBUG - $(date) - K8S_NODE_HOSTNAME_PREFIX: ${K8S_NODE_HOSTNAME_PREFIX}"
+  echo "TKS - DEBUG - $(date) - TKS_SEARCH_DOMAIN: ${TKS_SEARCH_DOMAIN}"
+  echo "TKS - DEBUG - $(date) - COUNT_INDEX: ${COUNT_INDEX + 1}"
 }
 
 configure_hostname(){
   echo "TKS - $(date) - Setting the hostname."
-  sudo hostnamectl set-hostname ${k8s_node_hostname_prefix}-${count_index + 1}.${search_domain}
+  sudo hostnamectl set-hostname ${K8S_NODE_HOSTNAME_PREFIX}-${COUNT_INDEX + 1}.${TKS_SEARCH_DOMAIN}
 }
 
 init_worker_node(){

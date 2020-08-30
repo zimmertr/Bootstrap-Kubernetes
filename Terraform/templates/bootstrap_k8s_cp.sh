@@ -11,9 +11,9 @@ main(){
   sudo chown tks:tks /var/log/tks
   debug > /var/log/tks/debug.log 2>&1
   configure_hostname > /var/log/tks/configure_hostname.log 2>&1
-
+  sleep 1
   hostname=$(hostname -f)
-  if [ $hostname == "${k8s_cp_hostname_prefix}-1.${search_domain}" ]; then
+  if [ $hostname == "${K8S_CP_HOSTNAME_PREFIX}-1.${TKS_SEARCH_DOMAIN}" ]; then
     init_primary_cp > /var/log/tks/init_primary_cp.log 2>&1
   else
     init_secondary_cp > /var/log/tks/init_secondary_cp.log 2>&1
@@ -24,15 +24,15 @@ main(){
 }
 
 debug(){
-  echo "TKS - DEBUG - $(date) - k8s_cp_hostname_prefix: ${k8s_cp_hostname_prefix}"
-  echo "TKS - DEBUG - $(date) - haproxy_hostname: ${haproxy_hostname}"
-  echo "TKS - DEBUG - $(date) - search_domain: ${search_domain}"
-  echo "TKS - DEBUG - $(date) - count_index: ${count_index + 1}"
+  echo "TKS - DEBUG - $(date) - K8S_CP_HOSTNAME_PREFIX: ${K8S_CP_HOSTNAME_PREFIX}"
+  echo "TKS - DEBUG - $(date) - HAPROXY_HOSTNAME: ${HAPROXY_HOSTNAME}"
+  echo "TKS - DEBUG - $(date) - TKS_SEARCH_DOMAIN: ${TKS_SEARCH_DOMAIN}"
+  echo "TKS - DEBUG - $(date) - COUNT_INDEX: ${COUNT_INDEX + 1}"
 }
 
 configure_hostname(){
   echo "TKS - $(date) - Setting the hostname."
-  sudo hostnamectl set-hostname ${k8s_cp_hostname_prefix}-${count_index + 1}.${search_domain}
+  sudo hostnamectl set-hostname ${K8S_CP_HOSTNAME_PREFIX}-${COUNT_INDEX + 1}.${TKS_SEARCH_DOMAIN}
 }
 
 init_primary_cp(){
@@ -42,7 +42,7 @@ init_primary_cp(){
 }
 
 init_secondary_cp(){
-  while ! curl https://${k8s_cp_hostname_prefix}-1.${search_domain}:6443 -k -I; do
+  while ! curl https://${K8S_CP_HOSTNAME_PREFIX}-1.${TKS_SEARCH_DOMAIN}:6443 -k -I; do
     echo "TKS - $(date) - The initial Control Plane node is not yet available."
   done
   echo "TKS - $(date) - The initial Control Plane node is now available."

@@ -16,14 +16,14 @@ main(){
 }
 
 debug(){
-  echo "TKS - DEBUG - $(date) - k8s_cp_hostname_prefix: ${k8s_cp_hostname_prefix}"
-  echo "TKS - DEBUG - $(date) - haproxy_hostname: ${haproxy_hostname}"
-  echo "TKS - DEBUG - $(date) - search_domain: ${search_domain}"
+  echo "TKS - DEBUG - $(date) - K8S_CP_HOSTNAME_PREFIX: ${K8S_CP_HOSTNAME_PREFIX}"
+  echo "TKS - DEBUG - $(date) - HAPROXY_HOSTNAME: ${HAPROXY_HOSTNAME}"
+  echo "TKS - DEBUG - $(date) - TKS_SEARCH_DOMAIN: ${TKS_SEARCH_DOMAIN}"
 }
 
 configure_hostname(){
   echo "TKS - $(date) - Setting the hostname."
-  sudo hostnamectl set-hostname ${haproxy_hostname}.${search_domain}
+  sudo hostnamectl set-hostname ${HAPROXY_HOSTNAME}.${TKS_SEARCH_DOMAIN}
 }
 
 disable_kubelet(){
@@ -33,15 +33,15 @@ disable_kubelet(){
 
 configure_haproxy(){
   echo "TKS - $(date) - Updating the HAProxy configuration file."
-  for n in {1..${k8s_node_num}}; do
-    echo "        server ${k8s_cp_hostname_prefix}-$n ${k8s_cp_hostname_prefix}-$n.${search_domain}:6443" >> /etc/tks/haproxy.cfg
-    echo "TKS - $(date) - ${k8s_cp_hostname_prefix}-$n has been added to the HAProxy configuration file."
+  for n in {1..${K8S_NODE_NUM}}; do
+    echo "        server ${K8S_CP_HOSTNAME_PREFIX}-$n ${K8S_CP_HOSTNAME_PREFIX}-$n.${TKS_SEARCH_DOMAIN}:6443" >> /etc/tks/haproxy.cfg
+    echo "TKS - $(date) - ${K8S_CP_HOSTNAME_PREFIX}-$n has been added to the HAProxy configuration file."
   done
 }
 
 deploy_haproxy(){
   echo "TKS - $(date) - Deploying the HAProxy Docker container."
-  sudo docker run --restart=always -d -p 6443:6443 --name haproxy -v /etc/tks/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro haproxy:${haproxy_version}
+  sudo docker run --restart=always -d -p 6443:6443 --name haproxy -v /etc/tks/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro haproxy:${HAPROXY_VERSION}
 }
 
 main

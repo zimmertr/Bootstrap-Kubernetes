@@ -56,21 +56,21 @@ This repository can be used on its own but it is intended to be used as a submod
   export ANSIBLE_PRIVATE_KEY_FILE="/Users/tj/.ssh/Sol.Milkyway/earth.sol.milkyway"
 
   # TKS Template Configuration
-  export TKS_BK_V_TEMPLATE_ID=100000
-  export TKS_BK_V_TEMPLATE_VCPUS=1
-  export TKS_BK_V_TEMPLATE_MEMORY=1024
-  export TKS_BK_V_TEMPLATE_DISK_SIZE="20G"
-  export TKS_BK_V_TEMPLATE_STORAGE_NAME="RAIDPool_Templates"
+  export VM_ID=100000
+  export TEMPLATE_VCPUS=1
+  export TEMPLATE_MEMORY=1024
+  export TEMPLATE_DISK_SIZE="20G"
+  export TEMPLATE_STORAGE="RAIDPool_Templates"
 
-  export TKS_BK_V_TEMPLATE_VLAN_ID=50
-  export TKS_BK_V_TEMPLATE_BRIDGE="vmbr0"
-  export TKS_BK_V_TEMPLATE_IP_ADDRESS="192.168.50.250"
-  export TKS_BK_V_TEMPLATE_SUBNET_SIZE="24"
-  export TKS_BK_V_TEMPLATE_GATEWAY="192.168.50.1"
-  export TKS_BK_V_TEMPLATE_NAMESERVER="192.168.1.100"
-  export TKS_BK_V_TEMPLATE_SEARCH_DOMAIN="sol.milkyway"
+  export TEMPLATE_TKS_VLAN_ID=50
+  export TEMPLATE_TKS_NET_BRIDGE="vmbr0"
+  export TEMPLATE_IP_ADDRESS="192.168.50.250"
+  export TEMPLATE_TKS_SUBNET_SIZE="24"
+  export TEMPLATE_GATEWAY="192.168.50.1"
+  export TEMPLATE_NAMESERVER="192.168.1.100"
+  export TEMPLATE_SEARCH_DOMAIN="sol.milkyway"
 
-  export TKS_BK_V_TEMPLATE_SSH_PUBLIC_KEY=`cat /Users/tj/.ssh/Sol.Milkyway/kubernetes.sol.milkyway.pub`
+  export TEMPLATE_SSH_PUBLIC_KEY=`cat /Users/tj/.ssh/Sol.Milkyway/kubernetes.sol.milkyway.pub`
 ```
 
 2. Build a template
@@ -80,19 +80,19 @@ ansible-playbook -i inventory.yml TKS-Bootstrap_Kubernetes/Ansible/create_templa
 
 3. Create a Resource Pool
 ```bash
-  export TKS_BK_T_CREATE_POOL=true
-  export TKS_BK_V_POOL_NAME="TKS"
+  export TKS_CREATE_POOL=true
+  export TKS_POOL_NAME="TKS"
 ansible-playbook -i inventory.yml TKS-Bootstrap_Kubernetes/Ansible/create_pool.yml
 ```
 
 4. Export the required environment variables
 ```bash
   # Proxmox Configuration
-  export TF_VAR_proxmox_user="root@pam"
-  export TF_VAR_proxmox_password="P@ssw0rd1!"
-  export TF_VAR_proxmox_hostname="earth"
-  export TF_VAR_proxmox_port=8006
-  export TF_VAR_resource_pool="TKS"
+  export TF_VAR_PROXMOX_USER="root@pam"
+  export TF_VAR_PROXMOX_PASSWORD="P@ssw0rd1!"
+  export TF_VAR_PROXMOX_HOSTNAME="earth"
+  export TF_VAR_PROXMOX_PORT=8006
+  export TF_VAR_TKS_RESOURCE_POOL="TKS"
 
   # TKS VM Configuration
   export TF_VAR_cp_num=3
@@ -107,18 +107,18 @@ ansible-playbook -i inventory.yml TKS-Bootstrap_Kubernetes/Ansible/create_pool.y
   export TF_VAR_node_mem=30720
   export TF_VAR_node_ip_address="192.168.50.111"
 
-  export TF_VAR_net_bridge="vmbr0"
-  export TF_VAR_vlan_id=50
-  #export TF_VAR_ip_prefix="192.168.50"
-  export TF_VAR_subnet_size=24
-  export TF_VAR_gateway="192.168.50.1"
+  export TF_VAR_TKS_NET_BRIDGE="vmbr0"
+  export TF_VAR_TKS_VLAN_ID=50
+  #export TF_VAR_TKS_IP_PREFIX="192.168.50"
+  export TF_VAR_TKS_SUBNET_SIZE=24
+  export TF_VAR_GATEWAY="192.168.50.1"
   export TF_VAR_nameserver="192.168.1.100"
   export TF_VAR_searchdomain="sol.milkyway"
 
   export TF_VAR_storage="FlashPool"
-  export TF_VAR_storage_type="zfspool"
-  export TF_VAR_disk_type="scsi"
-  export TF_VAR_disk_size=30
+  export TF_VAR_TKS_STORAGE_TYPE="zfspool"
+  export TF_VAR_TKS_DISK_TYPE="scsi"
+  export TF_VAR_TKS_DISK_SIZE=30
   export TF_VAR_ssh_key_path="/Users/tj/.ssh/Sol.Milkyway/kubernetes.sol.milkyway"
 ```
 

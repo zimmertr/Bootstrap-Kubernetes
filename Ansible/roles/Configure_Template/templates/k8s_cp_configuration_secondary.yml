@@ -6,8 +6,8 @@ apiVersion: kubeadm.k8s.io/v1beta2
 kind: JoinConfiguration
 discovery:
   bootstrapToken:
-    token: "{{ TEMPLATE_K8S_JOIN_TOKEN }}"
+    token: "{{ K8S_JOIN_TOKEN }}"
     unsafeSkipCAVerification: true
-    apiServerEndpoint: "{{ TEMPLATE_K8S_LB_HN }}.{{ TEMPLATE_K8S_SEARCH_DOMAIN }}:6443"
+    apiServerEndpoint: "{{ HAPROXY_HOSTNAME }}.{{ TEMPLATE_SEARCH_DOMAIN }}:6443"
 controlPlane:
-  certificateKey: "{{ TEMPLATE_K8S_CERT_KEY }}"
+  certificateKey: "{{ K8S_CERT_KEY }}"
