@@ -115,9 +115,9 @@
     owner: tks
     group: tks
   loop:
-    - cp_configuration_primary.yml
-    - cp_configuration_secondary.yml
-    - node_configuration.yml
+    - k8s_cp_configuration_primary.yml
+    - k8s_cp_configuration_secondary.yml
+    - k8s_node_configuration.yml
   loop_control:
     loop_var: file
 

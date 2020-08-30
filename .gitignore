@@ -3,3 +3,4 @@ fix
 notes
 .terraform/
 terraform.tfstate*
+.terraform.tfstate.lock.info

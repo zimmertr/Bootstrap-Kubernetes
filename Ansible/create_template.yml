@@ -13,7 +13,7 @@
     TEMPLATE_SUBNET_SIZE: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_SUBNET_SIZE') }}"
     TEMPLATE_GATEWAY: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_GATEWAY') }}"
     TEMPLATE_NAMESERVER: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_NAMESERVER') }}"
-    TEMPLATE_SEARCHDOMAIN: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_SEARCHDOMAIN') }}"
+    TEMPLATE_SEARCH_DOMAIN: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_SEARCH_DOMAIN') }}"
   tasks:
     - import_role:
         name: Create_Template
@@ -29,8 +29,8 @@
     TEMPLATE_K8S_VERSION: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_K8S_VERSION') }}"
     TEMPLATE_K8S_POD_NETWORK_CIDR: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_K8S_POD_NETWORK_CIDR') }}"
     TEMPLATE_K8S_SVC_NETWORK_CIDR: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_K8S_SVC_NETWORK_CIDR') }}"
-    TEMPLATE_K8S_LB_HN: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_K8S_LB_HN') }}"
-    TEMPLATE_K8S_SEARCHDOMAIN: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_SEARCHDOMAIN') }}"
+    TEMPLATE_K8S_LB_HN: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_K8S_HAPROXY_HOSTNAME') }}"
+    TEMPLATE_K8S_SEARCH_DOMAIN: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_SEARCH_DOMAIN') }}"
   tasks:
     - wait_for_connection:
 

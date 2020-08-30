@@ -68,7 +68,7 @@ This repository can be used on its own but it is intended to be used as a submod
   export TKS_BK_V_TEMPLATE_SUBNET_SIZE="24"
   export TKS_BK_V_TEMPLATE_GATEWAY="192.168.50.1"
   export TKS_BK_V_TEMPLATE_NAMESERVER="192.168.1.100"
-  export TKS_BK_V_TEMPLATE_SEARCHDOMAIN="sol.milkyway"
+  export TKS_BK_V_TEMPLATE_SEARCH_DOMAIN="sol.milkyway"
 
   export TKS_BK_V_TEMPLATE_SSH_PUBLIC_KEY=`cat /Users/tj/.ssh/Sol.Milkyway/kubernetes.sol.milkyway.pub`
 ```
@@ -92,18 +92,18 @@ ansible-playbook -i inventory.yml TKS-Bootstrap_Kubernetes/Ansible/create_pool.y
   export TF_VAR_proxmox_password="P@ssw0rd1!"
   export TF_VAR_proxmox_hostname="earth"
   export TF_VAR_proxmox_port=8006
-  export TF_VAR_proxmox_pool="TKS"
+  export TF_VAR_resource_pool="TKS"
 
   # TKS VM Configuration
   export TF_VAR_cp_num=3
   export TF_VAR_cp_vmid=101
-  export TF_VAR_cp_vcpu=2
+  export TF_VAR_cp_core=2
   export TF_VAR_cp_mem=10240
   export TF_VAR_cp_ip_address="192.168.50.101"
 
   export TF_VAR_node_num=3
   export TF_VAR_node_vmid=111
-  export TF_VAR_node_vcpu=4
+  export TF_VAR_node_core=4
   export TF_VAR_node_mem=30720
   export TF_VAR_node_ip_address="192.168.50.111"
 

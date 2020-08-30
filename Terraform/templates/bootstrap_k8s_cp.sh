@@ -1,4 +1,11 @@
 #!/bin/bash
+# Kubeadm bootstrapping occurs differently depending on the role of the node in the cluster.
+# For the most part, you can look at this in three primary ways. Initial CP, Additional CP,
+# and the worker nodes. When initializing a cluster, it is necessary to run a different
+# command based on which of these three roles the target node will fulfill. This the
+# requirement for this script. Basic logging is enabled and the resultant logs can be found
+# in `/var/log/tks`. The configuration files for TKS can also be found in `/etc/tks/`.
+
 main(){
   sudo mkdir /var/log/tks
   sudo chown tks:tks /var/log/tks
@@ -6,7 +13,7 @@ main(){
   configure_hostname > /var/log/tks/configure_hostname.log 2>&1
 
   hostname=$(hostname -f)
-  if [ $hostname == "${cp_hn_prefix}-1.${searchdomain}" ]; then
+  if [ $hostname == "${k8s_cp_hostname_prefix}-1.${search_domain}" ]; then
     init_primary_cp > /var/log/tks/init_primary_cp.log 2>&1
   else
     init_secondary_cp > /var/log/tks/init_secondary_cp.log 2>&1
@@ -17,32 +24,32 @@ main(){
 }
 
 debug(){
-  echo "TKS - DEBUG - $(date) - cp_hn_prefix: ${cp_hn_prefix}"
-  echo "TKS - DEBUG - $(date) - lb_hn: ${lb_hn}"
-  echo "TKS - DEBUG - $(date) - searchdomain: ${searchdomain}"
+  echo "TKS - DEBUG - $(date) - k8s_cp_hostname_prefix: ${k8s_cp_hostname_prefix}"
+  echo "TKS - DEBUG - $(date) - haproxy_hostname: ${haproxy_hostname}"
+  echo "TKS - DEBUG - $(date) - search_domain: ${search_domain}"
   echo "TKS - DEBUG - $(date) - count_index: ${count_index + 1}"
 }
 
 configure_hostname(){
   echo "TKS - $(date) - Setting the hostname."
-  sudo hostnamectl set-hostname ${cp_hn_prefix}-${count_index + 1}.${searchdomain}
+  sudo hostnamectl set-hostname ${k8s_cp_hostname_prefix}-${count_index + 1}.${search_domain}
 }
 
 init_primary_cp(){
   echo "TKS - $(date) - Initializing the Control Plane node."
-  sudo kubeadm init --config /etc/tks/cp_configuration_primary.yml --upload-certs -v=9
+  sudo kubeadm init --config /etc/tks/k8s_cp_configuration_primary.yml --upload-certs -v=9
   echo "TKS - $(date) - The initial Control Plane node is now available."
 }
 
 init_secondary_cp(){
-  while ! curl https://${cp_hn_prefix}-1.${searchdomain}:6443 -k -I; do
+  while ! curl https://${k8s_cp_hostname_prefix}-1.${search_domain}:6443 -k -I; do
     echo "TKS - $(date) - The initial Control Plane node is not yet available."
   done
   echo "TKS - $(date) - The initial Control Plane node is now available."
 
 
   echo "TKS - $(date) - Joining the secondary Control Plane node to the cluster."
-  sudo kubeadm join --config /etc/tks/cp_configuration_secondary.yml -v=9
+  sudo kubeadm join --config /etc/tks/k8s_cp_configuration_secondary.yml -v=9
   echo "TKS - $(date) - The secondary Control Plane node is now available"
 }
 
