@@ -11,7 +11,6 @@ resource "proxmox_vm_qemu" "k8s-cp" {
   target_node = var.PROXMOX_HOSTNAME
   pool        = var.TKS_RESOURCE_POOL
 
-
   sockets = var.K8S_CP_SOCKETS
   cores   = var.K8S_CP_CORES
   memory  = var.K8S_CP_MEMORY
@@ -39,8 +38,8 @@ resource "proxmox_vm_qemu" "k8s-cp" {
   os_type = "cloud-init"
   # Telmate Terraform provider does not support dynamic IP Addresses with `count`.
   # As a result, the below is used as a workaround. This introduces a node limitation of 9.
-  ipconfig0 = "ip=${var.TKS_IP_PREFIX}.${count.index + var.K8S_CP_IP_SUFFIX}/${var.TKS_SUBNET_SIZE},gw=${var.TKS_GATEWAY}"
-  # nameserver   = var.TKS_NAMESERVER
+  ipconfig0    = "ip=${var.TKS_IP_PREFIX}.${count.index + var.K8S_CP_IP_SUFFIX}/${var.TKS_SUBNET_SIZE},gw=${var.TKS_GATEWAY}"
+  nameserver   = var.TKS_NAMESERVER
   searchdomain = var.TKS_SEARCH_DOMAIN
 
   provisioner "file" {

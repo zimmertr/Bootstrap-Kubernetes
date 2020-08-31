@@ -32,9 +32,9 @@ resource "proxmox_vm_qemu" "k8s-lb" {
   onboot = var.TKS_ENABLE_ONBOOT
   agent  = 1
 
-  os_type   = "cloud-init"
-  ipconfig0 = "ip=${var.HAPROXY_IP_ADDRESS}/${var.TKS_SUBNET_SIZE},gw=${var.TKS_GATEWAY}"
-  # nameserver   = var.TKS_NAMESERVER
+  os_type      = "cloud-init"
+  ipconfig0    = "ip=${var.HAPROXY_IP_ADDRESS}/${var.TKS_SUBNET_SIZE},gw=${var.TKS_GATEWAY}"
+  nameserver   = var.TKS_NAMESERVER
   searchdomain = var.TKS_SEARCH_DOMAIN
 
   connection {
@@ -45,8 +45,12 @@ resource "proxmox_vm_qemu" "k8s-lb" {
   }
 
   provisioner "file" {
-    source      = "./templates/haproxy.cfg"
     destination = "/etc/tks/haproxy.cfg"
+    content = templatefile("./templates/haproxy.cfg", {
+      HAPROXY_STATS_ENABLE   = var.HAPROXY_STATS_ENABLE
+      HAPROXY_STATS_USERNAME = var.HAPROXY_STATS_USERNAME
+      HAPROXY_STATS_PASSWORD = var.HAPROXY_STATS_PASSWORD
+    })
   }
 }
 

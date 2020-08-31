@@ -9,7 +9,8 @@ main(){
   sudo mkdir /var/log/tks
   sudo chown tks:tks /var/log/tks
   debug > /var/log/tks/debug.log 2>&1
-  configure_hostname > /var/log/tks/configure_hostname.log 2>&1
+
+  configure_hostname
   disable_kubelet > /var/log/tks/disable_kubelet.log 2>&1
   configure_haproxy > /var/log/tks/configure_haproxy.log 2>&1
   deploy_haproxy > /var/log/tks/deploy_haproxy.log 2>&1
@@ -41,7 +42,7 @@ configure_haproxy(){
 
 deploy_haproxy(){
   echo "TKS - $(date) - Deploying the HAProxy Docker container."
-  sudo docker run --restart=always -d -p 6443:6443 --name haproxy -v /etc/tks/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro haproxy:${HAPROXY_VERSION}
+  sudo docker run --restart=always -d -p 6443:6443 -p 8080:8080 --name haproxy -v /etc/tks/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro haproxy:${HAPROXY_VERSION}
 }
 
 main

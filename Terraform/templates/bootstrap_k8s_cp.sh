@@ -10,9 +10,10 @@ main(){
   sudo mkdir /var/log/tks
   sudo chown tks:tks /var/log/tks
   debug > /var/log/tks/debug.log 2>&1
-  configure_hostname > /var/log/tks/configure_hostname.log 2>&1
-  sleep 1
+
+  configure_hostname
   hostname=$(hostname -f)
+
   if [ $hostname == "${K8S_CP_HOSTNAME_PREFIX}-1.${TKS_SEARCH_DOMAIN}" ]; then
     init_primary_cp > /var/log/tks/init_primary_cp.log 2>&1
   else
@@ -54,12 +55,14 @@ init_secondary_cp(){
 }
 
 copy_cluster_config(){
+  echo "TKS - $(date) - Staging the cluster configuration in the TKS home directory."
   mkdir /home/tks/.kube
   sudo cp /etc/kubernetes/admin.conf /home/tks/.kube/config
   sudo chown -R tks:tks /home/tks/.kube/
 }
 
 deploy_cni(){
+  echo "TKS - $(date) - Deploying a CNI to the cluster."
   wget https://docs.projectcalico.org/v3.16/manifests/calico.yaml -O /etc/tks/calico.yaml
   sudo kubectl apply -f /etc/tks/calico.yaml --kubeconfig /etc/kubernetes/admin.conf
 }

@@ -179,6 +179,21 @@ variable "HAPROXY_VERSION" {
   default     = "2.2.2"
   description = "The HAProxy Docker container tag to use for TKS."
 }
+variable "HAPROXY_STATS_ENABLE" {
+  type        = bool
+  default     = false
+  description = "Whether or not the Stats API should be enabled for the HAProxy virtual machine."
+}
+variable "HAPROXY_STATS_USERNAME" {
+  type        = string
+  default     = "tks"
+  description = "The username for the HAProxy Stats API."
+}
+variable "HAPROXY_STATS_PASSWORD" {
+  type        = string
+  default     = "P@ssw0rd1!"
+  description = "The password the HAProxy Stats API."
+}
 
 
 ##################################################

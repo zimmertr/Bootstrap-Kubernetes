@@ -6,7 +6,8 @@ main(){
   sudo mkdir /var/log/tks
   sudo chown tks:tks /var/log/tks
   debug > /var/log/tks/debug.log 2>&1
-  configure_hostname > /var/log/tks/configure_hostname.log 2>&1
+
+  configure_hostname
   init_worker_node > /var/log/tks/init_worker_node.log 2>&1
 }
 
