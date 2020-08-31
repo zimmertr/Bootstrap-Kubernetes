@@ -1,9 +1,4 @@
 #cloud-config
-# hostname: tks
-# manage_etc_hosts: false
-# manage_resolv_conf: true
-# chpasswd:
-  # expire: False
 users:
   - name: tks
     sudo: ALL=(ALL) NOPASSWD:ALL
@@ -11,11 +6,11 @@ users:
       - sudo
     lock_passwd: true
     ssh-authorized-keys:
-      - "{{ TEMPLATE_SSH_KEY }}"
+      - "{{ TEMPLATE_SSH_PUBLIC_KEY }}"
 write_files:
   - path: /etc/resolvconf/resolv.conf.d/base
     content: |
         nameserver {{ TEMPLATE_NAMESERVER }}
-        search {{ TEMPLATE_SEARCHDOMAIN }}
+        search {{ TEMPLATE_SEARCH_DOMAIN }}
 runcmd:
   - [ systemctl, restart, resolvconf ]

@@ -1,0 +1,24 @@
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd
+---
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: InitConfiguration
+bootstrapTokens:
+  - token: "{{ K8S_JOIN_TOKEN }}"
+    ttl: "0"
+certificateKey: "{{ K8S_CERT_KEY }}"
+---
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+apiServer:
+  extraArgs:
+    cloud-provider: external
+clusterName: "{{ K8S_CLUSTER_NAME }}"
+kubernetesVersion: "{{ K8S_VERSION }}"
+networking:
+  podSubnet: "{{ K8S_POD_NETWORK_CIDR }}"
+  serviceSubnet: "{{ K8S_SVC_NETWORK_CIDR }}"
+skip-certificate-key-print: true
+skip-token-print: true
+controlPlaneEndpoint: "{{ HAPROXY_HOSTNAME }}.{{ TEMPLATE_SEARCH_DOMAIN }}:6443"

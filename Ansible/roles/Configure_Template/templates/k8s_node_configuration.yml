@@ -1,0 +1,11 @@
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd
+---
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: JoinConfiguration
+discovery:
+  bootstrapToken:
+    token: "{{ K8S_JOIN_TOKEN }}"
+    unsafeSkipCAVerification: true
+    apiServerEndpoint: "{{ HAPROXY_HOSTNAME }}.{{ TEMPLATE_SEARCH_DOMAIN }}:6443"

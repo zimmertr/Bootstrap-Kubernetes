@@ -1,20 +1,9 @@
 - hosts: proxmox
   gather_facts: False
-  vars:
-    TEMPLATE_ID: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_ID') }}"
-    TEMPLATE_VCPUS: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_VCPUS') }}"
-    TEMPLATE_MEMORY: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_MEMORY') }}"
-    TEMPLATE_DISK_SIZE: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_DISK_SIZE') }}"
-    TEMPLATE_VLAN_ID: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_VLAN_ID') }}"
-    TEMPLATE_BRIDGE: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_BRIDGE') }}"
-    TEMPLATE_STORAGE_NAME: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_STORAGE_NAME') }}"
-    TEMPLATE_SSH_KEY: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_SSH_PUBLIC_KEY') }}"
-    TEMPLATE_IP_ADDRESS: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_IP_ADDRESS') }}"
-    TEMPLATE_SUBNET_SIZE: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_SUBNET_SIZE') }}"
-    TEMPLATE_GATEWAY: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_GATEWAY') }}"
-    TEMPLATE_NAMESERVER: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_NAMESERVER') }}"
-    TEMPLATE_SEARCHDOMAIN: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_SEARCHDOMAIN') }}"
   tasks:
+    - include_vars:
+        file: "{{ playbook_dir }}/variables.yml"
+
     - import_role:
         name: Create_Template
 
@@ -22,16 +11,10 @@
 - hosts: k8s_template
   gather_facts: false
   become: true
-  vars:
-    TEMPLATE_K8S_JOIN_TOKEN: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_K8S_JOIN_TOKEN') }}"
-    TEMPLATE_K8S_CERT_KEY: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_K8S_CERT_KEY') }}"
-    TEMPLATE_K8S_CLUSTER_NAME: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_K8S_CLUSTER_NAME') }}"
-    TEMPLATE_K8S_VERSION: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_K8S_VERSION') }}"
-    TEMPLATE_K8S_POD_NETWORK_CIDR: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_K8S_POD_NETWORK_CIDR') }}"
-    TEMPLATE_K8S_SVC_NETWORK_CIDR: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_K8S_SVC_NETWORK_CIDR') }}"
-    TEMPLATE_K8S_LB_HN: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_K8S_LB_HN') }}"
-    TEMPLATE_K8S_SEARCHDOMAIN: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_SEARCHDOMAIN') }}"
   tasks:
+    - include_vars:
+        file: "{{ playbook_dir }}/variables.yml"
+
     - wait_for_connection:
 
     - import_role:
@@ -40,11 +23,12 @@
 
 - hosts: proxmox
   gather_facts: False
-  vars:
-    TEMPLATE_ID: "{{ lookup('env', 'TKS_BK_V_TEMPLATE_ID') }}"
   tasks:
+    - include_vars:
+        file: "{{ playbook_dir }}/variables.yml"
+
     - name: Powering off the VM
-      command: qm stop {{ TEMPLATE_ID }}
+      command: qm stop {{ TEMPLATE_VM_ID }}
 
     - name: Converting the VM into a template
-      command: qm template {{ TEMPLATE_ID }}
+      command: qm template {{ TEMPLATE_VM_ID }}

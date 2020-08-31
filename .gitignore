@@ -1,5 +1,5 @@
 TODO.md
-fix
-notes
+test.sh
+delete.sh
 .terraform/
-terraform.tfstate*
+*.tfstate*
