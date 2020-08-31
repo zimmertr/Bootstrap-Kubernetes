@@ -46,7 +46,7 @@ resource "proxmox_vm_qemu" "k8s-lb" {
 
   provisioner "file" {
     destination = "/etc/tks/haproxy.cfg"
-    content = templatefile("./templates/haproxy.cfg", {
+    content = templatefile("${path.root}/templates/haproxy.cfg", {
       HAPROXY_STATS_ENABLE   = var.HAPROXY_STATS_ENABLE
       HAPROXY_STATS_USERNAME = var.HAPROXY_STATS_USERNAME
       HAPROXY_STATS_PASSWORD = var.HAPROXY_STATS_PASSWORD
@@ -68,7 +68,7 @@ resource "null_resource" "bootstrap_lb" {
       private_key = file(var.TKS_SSH_PRIVATE_KEY_PATH)
     }
     destination = "/etc/tks/bootstrap_haproxy.sh"
-    content = templatefile("./templates/bootstrap_haproxy.sh", {
+    content = templatefile("${path.root}/templates/bootstrap_haproxy.sh", {
       HAPROXY_HOSTNAME       = var.HAPROXY_HOSTNAME
       HAPROXY_VERSION        = var.HAPROXY_VERSION
       TKS_SEARCH_DOMAIN      = var.TKS_SEARCH_DOMAIN

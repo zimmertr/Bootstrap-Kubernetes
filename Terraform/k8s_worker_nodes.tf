@@ -46,12 +46,12 @@ resource "proxmox_vm_qemu" "k8s-nodes" {
     type        = "ssh"
     user        = var.TKS_TEMPLATE_USERNAME
     host        = "${var.TKS_IP_PREFIX}.${count.index + var.K8S_NODE_IP_SUFFIX}"
-    private_key = file("/Users/tj/.ssh/Sol.Milkyway/kubernetes.sol.milkyway")
+    private_key = file(var.TKS_SSH_PRIVATE_KEY_PATH)
   }
 
   provisioner "file" {
     destination = "/etc/tks/bootstrap_k8s_node.sh"
-    content = templatefile("./templates/bootstrap_k8s_node.sh", {
+    content = templatefile("${path.root}/templates/bootstrap_k8s_node.sh", {
       TKS_SEARCH_DOMAIN        = var.TKS_SEARCH_DOMAIN
       K8S_NODE_HOSTNAME_PREFIX = var.K8S_NODE_HOSTNAME_PREFIX
       COUNT_INDEX              = count.index

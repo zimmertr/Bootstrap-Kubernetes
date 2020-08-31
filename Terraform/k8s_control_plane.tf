@@ -50,7 +50,7 @@ resource "proxmox_vm_qemu" "k8s-cp" {
       host        = "${var.TKS_IP_PREFIX}.${count.index + var.K8S_CP_IP_SUFFIX}"
       private_key = file(var.TKS_SSH_PRIVATE_KEY_PATH)
     }
-    content = templatefile("./templates/bootstrap_k8s_cp.sh", {
+    content = templatefile("${path.root}/templates/bootstrap_k8s_cp.sh", {
       HAPROXY_HOSTNAME       = var.HAPROXY_HOSTNAME
       TKS_SEARCH_DOMAIN      = var.TKS_SEARCH_DOMAIN
       K8S_CP_HOSTNAME_PREFIX = var.K8S_CP_HOSTNAME_PREFIX

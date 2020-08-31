@@ -17,7 +17,7 @@ This repository can be used on its own but it is intended to be used as a submod
 
 ## Instructions
 
-### Environment Configuration
+### Prepare Local Environment
 
 1. Clone [TKS](https://github.com/zimmertr/TKS) and modify the `inventory.yml` file according to your environment.
 
@@ -46,31 +46,33 @@ This repository can be used on its own but it is intended to be used as a submod
 
 
 
+### Create VM Template
 
-### Deploy TKS
-
-1. Export the required environment variables. Optionally configure your shell to not save commands to history that start with spaces to avoid compromising secrets.
+1. TKS is configured to receive variables via ENV. Export the required environment variables. Optionally configure your shell to not save commands to history that start with spaces to avoid compromising secrets. Supported environment variables can be found in `./ansible/variables.yml`.
 ```bash
   # Ansible Configuration
   export ANSIBLE_REMOTE_USER="root"
   export ANSIBLE_PRIVATE_KEY_FILE="/Users/tj/.ssh/Sol.Milkyway/earth.sol.milkyway"
 
-  # TKS Template Configuration
-  export VM_ID=100000
-  export TEMPLATE_VCPUS=1
-  export TEMPLATE_MEMORY=1024
-  export TEMPLATE_DISK_SIZE="20G"
-  export TEMPLATE_STORAGE="RAIDPool_Templates"
-
+  # Template Configuration
+  export TEMPLATE_VM_ID=100000
   export TEMPLATE_TKS_VLAN_ID=50
-  export TEMPLATE_TKS_NET_BRIDGE="vmbr0"
+  export TEMPLATE_STORAGE_NAME="RAIDPool_Templates"
+  export TEMPLATE_SSH_PUBLIC_KEY=`cat /Users/tj/.ssh/Sol.Milkyway/kubernetes.sol.milkyway.pub`
   export TEMPLATE_IP_ADDRESS="192.168.50.250"
-  export TEMPLATE_TKS_SUBNET_SIZE="24"
   export TEMPLATE_GATEWAY="192.168.50.1"
   export TEMPLATE_NAMESERVER="192.168.1.100"
   export TEMPLATE_SEARCH_DOMAIN="sol.milkyway"
 
-  export TEMPLATE_SSH_PUBLIC_KEY=`cat /Users/tj/.ssh/Sol.Milkyway/kubernetes.sol.milkyway.pub`
+	# HAProxy Configuration
+  export HAPROXY_HOSTNAME="tks-lb"
+  export HAPROXY_STATS_ENABLE=true
+  export HAPROXY_STATS_USERNAME="tks"
+  export HAPROXY_STATS_PASSWORD="P@ssw0rd1\!" # Don't forget to escape your special characters.
+
+  # Kubernetes Secrets
+  export K8S_JOIN_TOKEN="abcdef.1234567890abcdef"
+  export K8S_CERT_KEY="abcdef1234567890abcdef1234567890abcdef01234567890abcdef123457890"
 ```
 
 2. Build a template
@@ -78,54 +80,53 @@ This repository can be used on its own but it is intended to be used as a submod
 ansible-playbook -i inventory.yml TKS-Bootstrap_Kubernetes/Ansible/create_template.yml
 ```
 
-3. Create a Resource Pool
+### Deploy TKS
+
+1. Export the required environment variables. Supported environment variables can be found in `./ansible/variables.yml`.
 ```bash
   export TKS_CREATE_POOL=true
   export TKS_POOL_NAME="TKS"
+```
+
+2. Deploy the Resource Pool
+
+```bash
 ansible-playbook -i inventory.yml TKS-Bootstrap_Kubernetes/Ansible/create_pool.yml
 ```
 
-4. Export the required environment variables
+3. Export the required environment variables. Supported environment variables can be found in `./terraform/variables.tf`.
+
 ```bash
   # Proxmox Configuration
-  export TF_VAR_PROXMOX_USER="root@pam"
-  export TF_VAR_PROXMOX_PASSWORD="P@ssw0rd1!"
   export TF_VAR_PROXMOX_HOSTNAME="earth"
-  export TF_VAR_PROXMOX_PORT=8006
-  export TF_VAR_TKS_RESOURCE_POOL="TKS"
+  export TF_VAR_PROXMOX_PASSWORD="P@ssw0rd1\!" # Don't forget to escape your special characters.
+
+  # HAProxy VM Configuration
+  export TF_VAR_HAPROXY_VMID=100
+  export TF_VAR_HAPROXY_IP_ADDRESS=192.168.50.100
 
   # TKS VM Configuration
-  export TF_VAR_cp_num=3
-  export TF_VAR_cp_vmid=101
-  export TF_VAR_cp_core=2
-  export TF_VAR_cp_mem=10240
-  export TF_VAR_cp_ip_address="192.168.50.101"
-
-  export TF_VAR_node_num=3
-  export TF_VAR_node_vmid=111
-  export TF_VAR_node_core=4
-  export TF_VAR_node_mem=30720
-  export TF_VAR_node_ip_address="192.168.50.111"
-
-  export TF_VAR_TKS_NET_BRIDGE="vmbr0"
-  export TF_VAR_TKS_VLAN_ID=50
-  #export TF_VAR_TKS_IP_PREFIX="192.168.50"
-  export TF_VAR_TKS_SUBNET_SIZE=24
-  export TF_VAR_GATEWAY="192.168.50.1"
-  export TF_VAR_nameserver="192.168.1.100"
-  export TF_VAR_searchdomain="sol.milkyway"
-
-  export TF_VAR_storage="FlashPool"
+  export TF_VAR_TKS_VLAN_ID=$TEMPLATE_TKS_VLAN_ID
+  export TF_VAR_TKS_IP_PREFIX="192.168.50"
+  export TF_VAR_TKS_GATEWAY="192.168.50.1"
+  export TF_VAR_TKS_NAMESERVER="192.168.1.100"
+  export TF_VAR_TKS_SEARCH_DOMAIN="sol.milkyway"
+  export TF_VAR_TKS_SSH_PRIVATE_KEY_PATH="/Users/tj/.ssh/Sol.Milkyway/kubernetes.sol.milkyway"
+  export TF_VAR_TKS_STORAGE="FlashPool"
   export TF_VAR_TKS_STORAGE_TYPE="zfspool"
-  export TF_VAR_TKS_DISK_TYPE="scsi"
-  export TF_VAR_TKS_DISK_SIZE=30
-  export TF_VAR_ssh_key_path="/Users/tj/.ssh/Sol.Milkyway/kubernetes.sol.milkyway"
+  export TF_VAR_TKS_ENABLE_BACKUPS=true
+  export TF_VAR_TKS_ENABLE_ONBOOT=true
+  export TF_VAR_K8S_CP_VMID=101
+  export TF_VAR_K8S_CP_IP_SUFFIX=101
+  export TF_VAR_K8S_CP_HOSTNAME_PREFIX="tks-cp"
+  export TF_VAR_K8S_NODE_VMID=111
+  export TF_VAR_K8S_NODE_IP_SUFFIX=111
+  export TF_VAR_K8S_NODE_HOSTNAME_PREFIX="tks-node"
 ```
 
-5. Deploy VMs
+5. Deploy TKS to Proxmox using your configuration.
 ```bash
-cd TKS-Bootstrap_Kubernetes/Terraform
-terraform init
-terraform apply -auto-approve
+terraform init ./TKS-Bootstrap_Kubernetes/Terraform
+terraform apply -auto-approve ./TKS-Bootstrap_Kubernetes/Terraform
 ```
 
