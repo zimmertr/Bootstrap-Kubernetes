@@ -107,6 +107,13 @@
   loop_control:
     loop_var: file
 
+- name: Removing the DHCP lines for eth0 from the interfaces file.
+  become: yes
+  lineinfile:
+      state: absent
+      path: /etc/network/interfaces
+      line: iface eth0 inet dhcp
+
 - name: Turning off the VM
   shell: shutdown -h now
   ignore_errors: true
