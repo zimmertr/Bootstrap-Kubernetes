@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    proxmox = {
+      source = "telmate/proxmox"
+      version = "2.8.0"
+    }
+  }
+}
+
 provider "proxmox" {
   pm_api_url      = "https://${var.PROXMOX_HOSTNAME}:${var.PROXMOX_PORT}/api2/json"
   pm_user         = var.PROXMOX_USER
@@ -6,12 +15,3 @@ provider "proxmox" {
   pm_tls_insecure = var.PROXMOX_ALLOW_INSECURE
   pm_timeout      = var.PROXMOX_API_TIMEOUT
 }
-
-
-
-
-
-
-
-
-

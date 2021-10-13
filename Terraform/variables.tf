@@ -55,8 +55,8 @@ variable "TKS_RESOURCE_POOL" {
   description = "The Proxmox Resource Pool into which TKS will be deployed. (Must exist already)"
 }
 variable "TKS_ENABLE_BACKUPS" {
-  type        = bool
-  default     = false
+  type        = number
+  default     = 0
   description = "Whether or not the TKS virtual machines should automatically be backed up by proxmox."
 }
 variable "TKS_ENABLE_ONBOOT" {
@@ -130,8 +130,8 @@ variable "TKS_DISK_TYPE" {
   description = "The type of virtual hard disk that will be attached to the TKS virtual machines."
 }
 variable "TKS_DISK_SIZE" {
-  type        = number
-  default     = 30
+  type        = string
+  default     = "20G"
   description = "The size, expressed in gigabytes, of the virtual hard disk that will be attached to the TKS virtual machines."
 }
 

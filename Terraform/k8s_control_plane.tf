@@ -16,20 +16,17 @@ resource "proxmox_vm_qemu" "k8s-cp" {
   memory  = var.K8S_CP_MEMORY
 
   network {
-    id     = 0
     model  = var.TKS_NET_TYPE
     bridge = var.TKS_NET_BRIDGE
     tag    = var.TKS_VLAN_ID
   }
 
   disk {
-    id           = 0
     storage      = var.TKS_STORAGE
-    storage_type = var.TKS_STORAGE_TYPE
     type         = var.TKS_DISK_TYPE
     size         = var.TKS_DISK_SIZE
     backup       = var.TKS_ENABLE_BACKUPS
-    iothread     = true
+    iothread     = 0
   }
 
   onboot = var.TKS_ENABLE_ONBOOT
