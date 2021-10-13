@@ -123,7 +123,6 @@ This project assumes you have a working [Proxmox server](https://github.com/zimm
    export TF_VAR_TKS_SEARCH_DOMAIN="sol.milkyway"
    export TF_VAR_TKS_SSH_PRIVATE_KEY_PATH="/Users/tj/.ssh/Sol.Milkyway/kubernetes.sol.milkyway"
    export TF_VAR_TKS_STORAGE="FlashPool"
-   export TF_VAR_TKS_STORAGE_TYPE="zfspool"
    export TF_VAR_TKS_ENABLE_BACKUPS=true
    export TF_VAR_TKS_ENABLE_ONBOOT=true
    export TF_VAR_K8S_CP_VMID=101

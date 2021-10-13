@@ -7,7 +7,7 @@
 - name: Creating a Debian 10 template
   command: >
     qm create {{ TEMPLATE_VM_ID }}
-    --name TKS-Debian-Template
+    --name {{ TEMPLATE_NAME }}
     --description "Debian 10 template consumed by TKS for Kubernetes Virtual Machines"
     --agent 1
     --sockets {{ TEMPLATE_SOCKETS }}

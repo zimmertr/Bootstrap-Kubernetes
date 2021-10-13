@@ -120,10 +120,6 @@ variable "TKS_STORAGE" {
   type        = string
   description = "The name of the storage in Proxmox onto which the TKS virtual machines should be deployed."
 }
-variable "TKS_STORAGE_TYPE" {
-  type        = string
-  description = "The type of the storage onto which Terraform will be deploying the TKS virtual machines."
-}
 variable "TKS_DISK_TYPE" {
   type        = string
   default     = "scsi"

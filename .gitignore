@@ -3,3 +3,4 @@ test*.sh
 delete.sh
 .terraform/
 *.tfstate*
+.terraform.lock.hcl
