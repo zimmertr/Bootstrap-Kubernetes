@@ -1,6 +1,6 @@
 # TKS - Bootstrap Kubernetes
 
-This repository can be used on its own but it is intended to be used as a submodule of [TKS](https://github.com/zimmertr/TKS). TKS enables enthusiasts and administrators alike to easily provision highly available and production-ready Kubernetes clusters and other modern infrastructure on Proxmox VE. 
+This repository can be used on its own but it is intended to be used as a submodule of [TKS](https://github.com/zimmertr/TKS). TKS enables enthusiasts and administrators alike to easily provision highly available and production-ready Kubernetes clusters and other modern infrastructure on Proxmox VE.
 
 * [Summary](#Summary)
 * [Requirements](#Requirements)
@@ -8,12 +8,12 @@ This repository can be used on its own but it is intended to be used as a submod
    * [Prepare Local Environment](#Prepare-Local-Environment)
    * [Create VM Template](#Create-VM-Template)
    * [Deploy Kubernetes](#Deploy-Kubernetes)
-   
+
 <hr>
 
 ## Summary
 
-`Bootstrap_Kubernetes`deploys a highly available Kubernetes cluster on Proxmox and configures it for immediate use. Kubeadm is leveraged  to provision the cluster components using predefined configuration files. [Calico](https://www.projectcalico.org/) is deployed to it to provide a pod network. 
+`Bootstrap_Kubernetes`deploys a highly available Kubernetes cluster on Proxmox and configures it for immediate use. Kubeadm is leveraged  to provision the cluster components using predefined configuration files. [Calico](https://www.projectcalico.org/) is deployed to it to provide a pod network.
 
 <hr>
 
@@ -77,7 +77,7 @@ This project assumes you have a working [Proxmox server](https://github.com/zimm
    export HAPROXY_STATS_ENABLE=true
    export HAPROXY_STATS_USERNAME="tks"
    export HAPROXY_STATS_PASSWORD="P@ssw0rd1\!" # Don't forget to escape your special characters.
- 
+
    # Kubernetes
    export K8S_JOIN_TOKEN="abcdef.1234567890abcdef"
    export K8S_CERT_KEY="abcdef1234567890abcdef1234567890abcdef01234567890abcdef123457890"
@@ -88,7 +88,7 @@ This project assumes you have a working [Proxmox server](https://github.com/zimm
    ```bash
    ansible-playbook -i inventory.yml TKS-Bootstrap_Kubernetes/Ansible/create_template.yml
    ```
-   
+
 ### Deploy Kubernetes
 
 1. Export the required environment variables. Supported environment variables can be found in `./ansible/variables.yml`.
@@ -110,11 +110,11 @@ This project assumes you have a working [Proxmox server](https://github.com/zimm
    # Proxmox Configuration
    export TF_VAR_PROXMOX_HOSTNAME="earth"
    export TF_VAR_PROXMOX_PASSWORD="P@ssw0rd1\!" # Don't forget to escape your special characters.
- 
+
    # HAProxy VM Configuration
    export TF_VAR_HAPROXY_VMID=100
    export TF_VAR_HAPROXY_IP_ADDRESS=192.168.50.100
- 
+
    # TKS VM Configuration
    export TF_VAR_TKS_VLAN_ID=$TEMPLATE_TKS_VLAN_ID
    export TF_VAR_TKS_IP_PREFIX="192.168.50"

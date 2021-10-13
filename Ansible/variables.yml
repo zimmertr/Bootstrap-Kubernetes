@@ -26,6 +26,6 @@ HAPROXY_ENABLE_STATS: "{{ lookup('env', 'HAPROXY_ENABLE_STATS') | default('true'
 K8S_JOIN_TOKEN: "{{ lookup('env', 'K8S_JOIN_TOKEN') }}"
 K8S_CERT_KEY: "{{ lookup('env', 'K8S_CERT_KEY') }}"
 K8S_CLUSTER_NAME: "{{ lookup('env', 'K8S_CLUSTER_NAME') | default('tks', true) }}"
-K8S_VERSION: "{{ lookup('env', 'K8S_VERSION') | default('v1.19.0', true) }}"
+K8S_VERSION: "{{ lookup('env', 'K8S_VERSION') | default('v1.22.0', true) }}"
 K8S_POD_NETWORK_CIDR: "{{ lookup('env', 'K8S_POD_NETWORK_CIDR') | default('172.16.0.0/16', true) }}"
 K8S_SVC_NETWORK_CIDR: "{{ lookup('env', 'K8S_SVC_NETWORK_CIDR') | default('10.96.0.0/12', true) }}"
