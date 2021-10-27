@@ -22,7 +22,7 @@ TEMPLATE_NAMESERVER: "{{ lookup('env', 'TEMPLATE_NAMESERVER') | default('8.8.8.8
 TEMPLATE_SEARCH_DOMAIN: "{{ lookup('env', 'TEMPLATE_SEARCH_DOMAIN') }}"
 TKS_CREATE_POOL: "{{ lookup('env', 'TKS_CREATE_POOL') | default('true', true)  }}"
 TKS_POOL_NAME: "{{ lookup('env', 'TKS_POOL_NAME') | default('TKS', true)  }}"
-HAPROXY_HOSTNAME: "{{ lookup('env', 'HAPROXY_HOSTNAME') | defailt('tks-lb') }}"
+HAPROXY_HOSTNAME: "{{ lookup('env', 'HAPROXY_HOSTNAME') | default('tks-lb') }}"
 HAPROXY_ENABLE_STATS: "{{ lookup('env', 'HAPROXY_ENABLE_STATS') | default('true'), true) }}"
 K8S_JOIN_TOKEN: "{{ lookup('env', 'K8S_JOIN_TOKEN') }}"
 K8S_CERT_KEY: "{{ lookup('env', 'K8S_CERT_KEY') }}"
