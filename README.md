@@ -1,6 +1,6 @@
 # TKS - Bootstrap Kubernetes
 
-This repository can be used on its own but it is intended to be used as a submodule of [TKS](https://github.com/zimmertr/TKS). TKS enables enthusiasts and administrators alike to easily provision highly available and production-ready Kubernetes clusters and other modern infrastructure on Proxmox VE.
+This project is abandoned, but you might find [this](https://github.com/zimmertr/TJs-Kubernetes-Service) useful?
 
 * [Summary](#Summary)
 * [Requirements](#Requirements)
@@ -42,11 +42,11 @@ This project assumes you have a working [Proxmox server](https://github.com/zimm
    cd /tmp
    git clone https://github.com/Telmate/terraform-provider-proxmox.git
    cd terraform-provider-proxmox
-
+   
    go install github.com/Telmate/terraform-provider-proxmox/cmd/terraform-provider-proxmox
    go install github.com/Telmate/terraform-provider-proxmox/cmd/terraform-provisioner-proxmox
    make
-
+   
    mkdir ~/.terraform.d/plugins
    cp bin/terraform-provider-proxmox ~/.terraform.d/plugins
    cp bin/terraform-provisioner-proxmox ~/.terraform.d/plugins
@@ -61,7 +61,7 @@ This project assumes you have a working [Proxmox server](https://github.com/zimm
    # Ansible
    export ANSIBLE_REMOTE_USER="root"
    export ANSIBLE_PRIVATE_KEY_FILE="/Users/tj/.ssh/Sol.Milkyway/earth.sol.milkyway"
-
+   
    # Template
    export TEMPLATE_VM_ID=100000
    export TEMPLATE_TKS_VLAN_ID=50
@@ -71,13 +71,13 @@ This project assumes you have a working [Proxmox server](https://github.com/zimm
    export TEMPLATE_GATEWAY="192.168.50.1"
    export TEMPLATE_NAMESERVER="192.168.1.100"
    export TEMPLATE_SEARCH_DOMAIN="sol.milkyway"
-
+   
    # HAProxy
    export HAPROXY_HOSTNAME="tks-lb"
    export HAPROXY_STATS_ENABLE=true
    export HAPROXY_STATS_USERNAME="tks"
    export HAPROXY_STATS_PASSWORD="P@ssw0rd1\!" # Don't forget to escape your special characters.
-
+   
    # Kubernetes
    export K8S_JOIN_TOKEN="abcdef.1234567890abcdef"
    export K8S_CERT_KEY="abcdef1234567890abcdef1234567890abcdef01234567890abcdef123457890"
